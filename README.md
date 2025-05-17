@@ -1,4 +1,4 @@
-# statusphere-io
+# statusphere
 
 This repository contains an aggressively-simplified Go implementation of the ATProtocol [statusphere](https://github.com/bluesky-social/statusphere-example-app) sample app.
 
