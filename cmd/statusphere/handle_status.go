@@ -16,7 +16,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	s := r.FormValue("status")
-	did := r.Header.Get("x-io-did")
+	did := r.Header.Get("user-did")
 	status := map[string]interface{}{
 		"status":    s,
 		"createdAt": time.Now().UTC().Format(AtprotoDatetimeLayout),

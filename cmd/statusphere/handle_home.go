@@ -20,7 +20,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// When a user is signed-in, IO puts their did in this header.
-	did := r.Header.Get("did")
+	did := r.Header.Get("user-did")
 
 	statuses, _ := listStatus()
 	var status string
