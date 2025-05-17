@@ -3,7 +3,7 @@ module github.com/agentio/statusphere-io
 go 1.24.2
 
 require (
-	github.com/agentio/atiquette v0.0.0-20250517063253-dcdc1f732193
+	github.com/agentio/atiquette v0.0.0-20250517065157-badc090e77d9
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.3
 	zombiezen.com/go/sqlite v1.4.0
