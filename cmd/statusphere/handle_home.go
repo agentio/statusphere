@@ -8,9 +8,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/agentio/statusphere-io/api/app/bsky"
-	"github.com/agentio/statusphere-io/api/com/atproto"
-	"github.com/agentio/statusphere-io/api/xyz/statusphere"
+	"github.com/agentio/atiquette/api/app/bsky"
+	"github.com/agentio/atiquette/api/com/atproto"
+	"github.com/agentio/atiquette/api/xyz/statusphere"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +20,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// When a user is signed-in, IO puts their did in this header.
-	did := r.Header.Get("x-io-did")
+	did := r.Header.Get("did")
 
 	statuses, _ := listStatus()
 	var status string

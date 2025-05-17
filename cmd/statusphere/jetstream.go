@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/agentio/statusphere-io/api/xyz/statusphere"
+	"github.com/agentio/atiquette/api/xyz/statusphere"
 	"github.com/gorilla/websocket"
 )
 

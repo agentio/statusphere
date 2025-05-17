@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/agentio/statusphere-io/api/com/atproto"
+	"github.com/agentio/atiquette/api/com/atproto"
 )
 
 const AtprotoDatetimeLayout = "2006-01-02T15:04:05.999Z"

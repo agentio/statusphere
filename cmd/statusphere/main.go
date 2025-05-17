@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	xrpc_anonymous "github.com/agentio/statusphere-io/pkg/xrpc/anonymous"
-	xrpc_session "github.com/agentio/statusphere-io/pkg/xrpc/session"
+	xrpc_anonymous "github.com/agentio/atiquette/pkg/xrpc/anonymous"
+	xrpc_session "github.com/agentio/atiquette/pkg/xrpc/session"
 	"github.com/gorilla/mux"
 )
 
