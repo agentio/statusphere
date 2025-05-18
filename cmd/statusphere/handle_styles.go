@@ -122,7 +122,7 @@ button:hover, .button:hover {
   justify-content: space-between;
 }
 
-.login-form {
+.signin-form {
   display: flex;
   flex-direction: row;
   gap: 6px;
@@ -132,7 +132,7 @@ button:hover, .button:hover {
   background-color: #fff;
 }
 
-.login-form input {
+.signin-form input {
   flex: 1;
   border: 0;
 }
