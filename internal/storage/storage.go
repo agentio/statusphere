@@ -1,4 +1,4 @@
-package main
+package storage
 
 import (
 	"fmt"
@@ -60,10 +60,6 @@ type Status struct {
 	UpdatedAt string
 }
 
-func (s *Status) Handle() string {
-	return getHandle(s.AuthorDid)
-}
-
 func (s *Status) Created() string {
 	t, err := time.Parse("2006-01-02T15:04:05.000Z", s.CreatedAt)
 	if err != nil {
@@ -72,7 +68,7 @@ func (s *Status) Created() string {
 	return t.Format("Mon Jan 02 2006")
 }
 
-func saveStatus(status *Status) error {
+func SaveStatus(status *Status) error {
 	conn, err := sqlite.OpenConn(dbFileName(), sqlite.OpenReadWrite)
 	if err != nil {
 		return err
@@ -95,7 +91,7 @@ func saveStatus(status *Status) error {
 	return insertStmt.Reset()
 }
 
-func listStatus() ([]*Status, error) {
+func ListStatus() ([]*Status, error) {
 	conn, err := sqlite.OpenConn(dbFileName(), sqlite.OpenReadOnly)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"log"
@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/agentio/atiquette/api/com/atproto"
+	"github.com/agentio/statusphere/internal/clients"
+	"github.com/agentio/statusphere/internal/storage"
 )
 
 const AtprotoDatetimeLayout = "2006-01-02T15:04:05.999Z"
@@ -21,7 +23,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		"status":    s,
 		"createdAt": time.Now().UTC().Format(AtprotoDatetimeLayout),
 	}
-	authorizedClient := sessionClient.AuthorizedCopy(r)
+	authorizedClient := clients.SessionClient.AuthorizedCopy(r)
 	input := atproto.RepoCreateRecord_Input{
 		Collection: "xyz.statusphere.status",
 		Repo:       did,
@@ -33,7 +35,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	saveStatus(&Status{
+	storage.SaveStatus(&storage.Status{
 		Uri:       out.Uri,
 		AuthorDid: did,
 		Status:    status["status"].(string),

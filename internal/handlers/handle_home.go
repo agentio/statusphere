@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"context"
@@ -11,10 +11,33 @@ import (
 	"github.com/agentio/atiquette/api/app/bsky"
 	"github.com/agentio/atiquette/api/com/atproto"
 	"github.com/agentio/atiquette/api/xyz/statusphere"
+	"github.com/agentio/statusphere/internal/clients"
+	"github.com/agentio/statusphere/internal/storage"
 )
 
+var handles = make(map[string]string)
+
+func getHandle(did string) string {
+	h, ok := handles[did]
+	if ok {
+		return h
+	}
+	result, err := bsky.ActorGetProfile(context.TODO(), clients.AnonymousClient, did)
+	if err != nil {
+		log.Printf("%s", err)
+		return ""
+	}
+	h = result.Handle
+	handles[did] = h
+	return h
+}
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.New("home").Parse(home_template)
+	t, err := template.New("home").Funcs(template.FuncMap{
+		"handle": func(s *storage.Status) string {
+			return getHandle(s.AuthorDid)
+		},
+	}).Parse(home_template)
 	if err != nil {
 		return
 	}
@@ -22,13 +45,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// When a user is signed-in, IO puts their did in this header.
 	did := r.Header.Get("user-did")
 
-	statuses, _ := listStatus()
+	statuses, _ := storage.ListStatus()
 	var status string
 
 	var dn string
 	if did != "" {
 		dn = did
-		authorizedClient := sessionClient.AuthorizedCopy(r) // configure the client with headers sent with this request
+		authorizedClient := clients.SessionClient.AuthorizedCopy(r) // configure the client with headers sent with this request
 		// get user profile
 		{
 			out, err := bsky.ActorGetProfile(r.Context(), authorizedClient, did)
@@ -144,7 +167,7 @@ const home_template = `
 <div class="status">{{$status.Status}}</div>
 </div>
 <div class="desc">
-<a class="author" href="https://bsky.app/profile/{{$status.Handle}}">@{{$status.Handle}}</a>
+<a class="author" href="https://bsky.app/profile/{{handle $status}}">@{{handle $status}}</a>
 was feeling {{$status.Status}} on {{$status.Created}}
 </div>
 </div>
@@ -152,20 +175,3 @@ was feeling {{$status.Status}} on {{$status.Created}}
 
 </body></html>
 `
-
-var handles = make(map[string]string)
-
-func getHandle(did string) string {
-	h, ok := handles[did]
-	if ok {
-		return h
-	}
-	result, err := bsky.ActorGetProfile(context.TODO(), anonymousClient, did)
-	if err != nil {
-		log.Printf("%s", err)
-		return ""
-	}
-	h = result.Handle
-	handles[did] = h
-	return h
-}

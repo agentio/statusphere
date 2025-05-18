@@ -1,4 +1,4 @@
-package main
+package jetstream
 
 import (
 	"encoding/json"
@@ -7,12 +7,13 @@ import (
 	"time"
 
 	"github.com/agentio/atiquette/api/xyz/statusphere"
+	"github.com/agentio/statusphere/internal/storage"
 	"github.com/gorilla/websocket"
 )
 
 const addr = "jetstream2.us-west.bsky.network"
 
-func jetstream() {
+func Listen() {
 
 	u := url.URL{Scheme: "wss", Host: addr, Path: "/subscribe", RawQuery: "wantedCollections=xyz.statusphere.status"}
 	log.Printf("connecting to %s", u.String())
@@ -33,7 +34,7 @@ func jetstream() {
 		json.Unmarshal(message, &m)
 		if m.Kind == "commit" {
 			log.Printf("%+v\n", m)
-			saveStatus(&Status{
+			storage.SaveStatus(&storage.Status{
 				Uri:       "at://" + m.Did + "/" + m.Commit.Collection + "/" + m.Commit.RKey,
 				AuthorDid: m.Did,
 				Status:    m.Commit.Record.Status,
