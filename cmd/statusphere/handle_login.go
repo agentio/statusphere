@@ -32,7 +32,7 @@ const login_template = `
 </div>
 <div class="container">
 <form action="/{{.Prefix}}/login" method="post" class="login-form">
-<input type="text" name="auth-input" placeholder="Enter your handle (eg alice.bsky.social)" required="">
+<input type="text" name="handle" placeholder="Enter your handle (eg alice.bsky.social)" required="">
 <button type="submit">Log in</button>
 </form>
 <div class="signup-cta">
