@@ -29,7 +29,7 @@ func main() {
 	mux := mux.NewRouter()
 	mux.HandleFunc("/", HomeHandler)
 	mux.HandleFunc("/status", StatusHandler)
-	mux.HandleFunc("/login", LoginHandler)
+	mux.HandleFunc("/signin", SigninHandler)
 	mux.HandleFunc("/public/styles.css", StylesHandler)
 	httpd := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),

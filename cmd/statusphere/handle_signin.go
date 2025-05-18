@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.New("login").Parse(login_template)
+func SigninHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.New("signin").Parse(signin_template)
 	if err != nil {
 		return
 	}
-	err = t.ExecuteTemplate(w, "login", map[string]any{
+	err = t.ExecuteTemplate(w, "signin", map[string]any{
 		"Prefix": prefix,
 	})
 	if err != nil {
@@ -18,10 +18,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const login_template = `
+const signin_template = `
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Log in</title>
+<title>Sign in</title>
 <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
@@ -31,9 +31,9 @@ const login_template = `
 <p>Set your status on the Atmosphere.</p>
 </div>
 <div class="container">
-<form action="/{{.Prefix}}/login" method="post" class="login-form">
+<form action="/{{.Prefix}}/signin" method="post" class="signin-form">
 <input type="text" name="handle" placeholder="Enter your handle (eg alice.bsky.social)" required="">
-<button type="submit">Log in</button>
+<button type="submit">Sign in</button>
 </form>
 <div class="signup-cta">
 Don't have an account on the Atmosphere?

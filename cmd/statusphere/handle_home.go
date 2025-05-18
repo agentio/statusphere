@@ -122,13 +122,13 @@ const home_template = `
 {{ if .Name }}
 <div>Hi, <strong>{{ .Name }}</strong>. What's your status today?</div>
 {{ else }}
-<div><a href="/login">Log in</a> to set your status!</div>
+<div><a href="/signin">Sign in</a> to set your status!</div>
 {{ end }}
 <div>
 {{ if .Name }}
-<a href="/{{.Prefix}}/logout" class="button">Log out</a>
+<a href="/{{.Prefix}}/signout" class="button">Sign out</a>
 {{ else }}
-<a href="/login" class="button">Log in</a>
+<a href="/signin" class="button">Sign in</a>
 {{ end }}
 </div>
 </div>
