@@ -10,7 +10,7 @@ import (
 
 	"github.com/agentio/atiquette/api/app/bsky"
 	"github.com/agentio/atiquette/api/com/atproto"
-	"github.com/agentio/atiquette/api/xyz/statusphere"
+	"github.com/agentio/statusphere/api/xyz/statusphere"
 	"github.com/agentio/statusphere/internal/clients"
 	"github.com/agentio/statusphere/internal/storage"
 )
