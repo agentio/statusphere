@@ -3,4 +3,4 @@ all:
 
 
 lexgen:
-	lexgenlite --build-file build/xyz.json lexicons
+	lexgenlite --build-file api.json lexicons
