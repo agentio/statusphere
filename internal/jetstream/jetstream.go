@@ -13,22 +13,31 @@ import (
 
 const addr = "jetstream2.us-west.bsky.network"
 
+var retryDelay = 1 * time.Second
+
 func Listen() {
+	for {
+		err := connect(addr)
+		if err != nil {
+			log.Printf("%s", err)
+			time.Sleep(retryDelay)
+			retryDelay *= 2 // backoff
+		}
+	}
+}
 
-	u := url.URL{Scheme: "wss", Host: addr, Path: "/subscribe", RawQuery: "wantedCollections=xyz.statusphere.status"}
+func connect(host string) error {
+	u := url.URL{Scheme: "wss", Host: host, Path: "/subscribe", RawQuery: "wantedCollections=xyz.statusphere.status"}
 	log.Printf("connecting to %s", u.String())
-
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		log.Fatal("dial:", err)
+		return err
 	}
 	defer c.Close()
-
 	for {
 		_, message, err := c.ReadMessage()
 		if err != nil {
-			log.Println("read:", err)
-			return
+			return err
 		}
 		var m Message
 		json.Unmarshal(message, &m)
@@ -42,6 +51,8 @@ func Listen() {
 				UpdatedAt: time.Now().UTC().Format("2006-01-02T15:04:05.000Z"),
 			})
 		}
+		// reset retry delay whenever we get a message
+		retryDelay = 1 * time.Second
 	}
 }
 
