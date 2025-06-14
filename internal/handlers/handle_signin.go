@@ -10,9 +10,7 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	err = t.ExecuteTemplate(w, "signin", map[string]any{
-		"Prefix": prefix,
-	})
+	err = t.ExecuteTemplate(w, "signin", map[string]any{})
 	if err != nil {
 		return
 	}
@@ -31,7 +29,7 @@ const signin_template = `
 <p>Set your status on the Atmosphere.</p>
 </div>
 <div class="container">
-<form action="/{{.Prefix}}/signin" method="post" class="signin-form">
+<form action="/@/signin" method="post" class="signin-form">
 <input type="text" name="handle" placeholder="Enter your handle (eg alice.bsky.social)" required="">
 <button type="submit">Sign in</button>
 </form>

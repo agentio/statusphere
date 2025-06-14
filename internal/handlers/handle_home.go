@@ -85,7 +85,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	err = t.ExecuteTemplate(w, "home", map[string]any{
 		"Did":      did,
 		"Name":     dn,
-		"Prefix":   prefix,
 		"Buttons":  buttons,
 		"Statuses": statuses,
 		"Status":   status,
@@ -149,7 +148,7 @@ const home_template = `
 {{ end }}
 <div>
 {{ if .Name }}
-<a href="/{{.Prefix}}/signout" class="button">Sign out</a>
+<a href="/@/signout" class="button">Sign out</a>
 {{ else }}
 <a href="/signin" class="button">Sign in</a>
 {{ end }}
