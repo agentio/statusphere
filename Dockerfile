@@ -1,4 +1,4 @@
-FROM golang:1.24.3 as builder
+FROM golang:1.25.1 AS builder
 WORKDIR /app
 COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o statusphere .

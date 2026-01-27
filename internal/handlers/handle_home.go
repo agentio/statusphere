@@ -7,11 +7,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/agentio/atiquette/api/app/bsky"
-	"github.com/agentio/atiquette/api/com/atproto"
-	"github.com/agentio/statusphere/api/xyz/statusphere"
-	"github.com/agentio/statusphere/internal/clients"
+	"github.com/agentio/slink/pkg/client"
+	"github.com/agentio/statusphere/gen/xrpc"
 	"github.com/agentio/statusphere/internal/storage"
 )
 
@@ -22,7 +21,12 @@ func getHandle(did string) string {
 	if ok {
 		return h
 	}
-	result, err := bsky.ActorGetProfile(context.TODO(), clients.AnonymousClient, did)
+
+	c := client.NewClientWithOptions(client.ClientOptions{
+		Host: "https://public.api.bsky.app",
+	})
+
+	result, err := xrpc.AppBskyActorGetProfile(context.TODO(), c, did)
 	if err != nil {
 		log.Printf("%s", err)
 		return ""
@@ -30,6 +34,14 @@ func getHandle(did string) string {
 	h = result.Handle
 	handles[did] = h
 	return h
+}
+
+func sessionproxy() string {
+	p := os.Getenv("ATPROTO_PROXY")
+	if p != "" {
+		return p
+	}
+	return "http://localhost:7000"
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,26 +63,26 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	var dn string
 	if did != "" {
 		dn = did
-		authorizedClient := clients.SessionClient.AuthorizedCopy(r) // configure the client with headers sent with this request
-		// get user profile
-		{
-			out, err := bsky.ActorGetProfile(r.Context(), authorizedClient, did)
+		c := client.NewClientWithOptions(client.ClientOptions{
+			Host: sessionproxy(),
+		})
+		c.SetSessionHeaders(r)
+		{ // get user profile
+			out, err := xrpc.AppBskyActorGetProfile(r.Context(), c, did)
 			if err == nil {
 				if out.DisplayName != nil {
+					log.Printf("got handle %s", *out.DisplayName)
 					dn = *out.DisplayName
 				}
-			} else {
-				log.Printf("%+v", err)
 			}
 		}
-		// get user status
-		{
-			out, err := atproto.RepoListRecords(r.Context(), authorizedClient,
+		{ // get user status
+			out, err := xrpc.ComATProtoRepoListRecords(r.Context(), c,
 				"xyz.statusphere.status", "", 1, did, false)
 			if err == nil {
 				if len(out.Records) > 0 {
 					b, _ := json.Marshal(out.Records[0].Value)
-					var s statusphere.Status
+					var s xrpc.XyzStatusphereStatus
 					err = json.Unmarshal(b, &s)
 					if err != nil {
 						fmt.Println(err)

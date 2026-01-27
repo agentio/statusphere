@@ -2,5 +2,5 @@ all:
 	go install ./...
 
 
-lexgen:
-	lexgenlite --build-file api.json lexicons
+xrpc:
+	slink generate xrpc -m xrpc.json

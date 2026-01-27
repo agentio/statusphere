@@ -1,0 +1,8 @@
+{
+  "ids": [
+    "app.bsky.actor.getProfile",
+    "com.atproto.repo.listRecords",
+    "com.atproto.repo.createRecord",
+    "xyz.statusphere.status"
+  ]
+}

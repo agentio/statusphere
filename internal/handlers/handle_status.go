@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/agentio/atiquette/api/com/atproto"
-	"github.com/agentio/statusphere/internal/clients"
+	"github.com/agentio/slink/pkg/client"
+	"github.com/agentio/statusphere/gen/xrpc"
 	"github.com/agentio/statusphere/internal/storage"
 )
 
@@ -23,13 +23,17 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		"status":    s,
 		"createdAt": time.Now().UTC().Format(AtprotoDatetimeLayout),
 	}
-	authorizedClient := clients.SessionClient.AuthorizedCopy(r)
-	input := atproto.RepoCreateRecord_Input{
+	c := client.NewClientWithOptions(client.ClientOptions{
+		Host: sessionproxy(),
+	})
+	c.SetSessionHeaders(r)
+
+	input := xrpc.ComATProtoRepoCreateRecord_Input{
 		Collection: "xyz.statusphere.status",
 		Repo:       did,
 		Record:     status,
 	}
-	out, err := atproto.RepoCreateRecord(r.Context(), authorizedClient, &input)
+	out, err := xrpc.ComATProtoRepoCreateRecord(r.Context(), c, &input)
 	if err != nil {
 		log.Printf("%+v", err)
 		http.Error(w, err.Error(), 500)

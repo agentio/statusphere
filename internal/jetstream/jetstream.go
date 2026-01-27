@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/agentio/statusphere/api/xyz/statusphere"
+	"github.com/agentio/statusphere/gen/xrpc"
 	"github.com/agentio/statusphere/internal/storage"
 	"github.com/gorilla/websocket"
 )
@@ -41,13 +41,28 @@ func connect(host string) error {
 		}
 		var m Message
 		json.Unmarshal(message, &m)
+
+		if false {
+			b, _ := json.MarshalIndent(m, "", "  ")
+			log.Printf("%s", b)
+		}
+
 		if m.Kind == "commit" {
-			log.Printf("%+v\n", m)
+			log.Printf("%+v\n", m.Commit.Record)
+
+			var status xrpc.XyzStatusphereStatus
+			b, _ := json.Marshal(m.Commit.Record)
+			err := json.Unmarshal(b, &status)
+			if err != nil {
+				log.Printf("oops %s", err)
+				continue
+			}
+			log.Printf("saving status %+v", status)
 			storage.SaveStatus(&storage.Status{
 				Uri:       "at://" + m.Did + "/" + m.Commit.Collection + "/" + m.Commit.RKey,
 				AuthorDid: m.Did,
-				Status:    m.Commit.Record.Status,
-				CreatedAt: m.Commit.Record.CreatedAt,
+				Status:    status.Status,
+				CreatedAt: status.CreatedAt,
 				UpdatedAt: time.Now().UTC().Format("2006-01-02T15:04:05.000Z"),
 			})
 		}
@@ -61,11 +76,11 @@ type Message struct {
 	Time   int64  `json:"time_us"`
 	Kind   string `json:"kind"`
 	Commit struct {
-		Rev        string             `json:"rev"`
-		Operation  string             `json:"operation"`
-		Collection string             `json:"collection"`
-		RKey       string             `json:"rkey"`
-		Record     statusphere.Status `json:"record"`
-		Cid        string             `json:"cid"`
+		Rev        string `json:"rev"`
+		Operation  string `json:"operation"`
+		Collection string `json:"collection"`
+		RKey       string `json:"rkey"`
+		Record     any    `json:"record"`
+		Cid        string `json:"cid"`
 	} `json:"commit"`
 }
