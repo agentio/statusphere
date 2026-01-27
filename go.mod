@@ -4,7 +4,7 @@ go 1.25.1
 
 require (
 	github.com/agentio/atiquette v0.0.0-20250519003452-9d778dfd2d16
-	github.com/agentio/slink v0.0.0-20260127170806-d1811a8468e0
+	github.com/agentio/slink v0.0.0-20260127190208-988a6fe7262b
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.3
 	zombiezen.com/go/sqlite v1.4.2

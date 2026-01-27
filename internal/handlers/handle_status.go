@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/agentio/slink/pkg/client"
+	"github.com/agentio/slink/pkg/frodo"
 	"github.com/agentio/statusphere/gen/xrpc"
 	"github.com/agentio/statusphere/internal/storage"
 )
@@ -23,7 +23,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		"status":    s,
 		"createdAt": time.Now().UTC().Format(AtprotoDatetimeLayout),
 	}
-	c := client.NewClientWithOptions(client.ClientOptions{
+	c := frodo.NewClientWithOptions(frodo.ClientOptions{
 		Host: sessionproxy(),
 	})
 	c.SetSessionHeaders(r)

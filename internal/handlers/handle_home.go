@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/agentio/slink/pkg/client"
+	"github.com/agentio/slink/pkg/frodo"
 	"github.com/agentio/statusphere/gen/xrpc"
 	"github.com/agentio/statusphere/internal/storage"
 )
@@ -22,7 +22,7 @@ func getHandle(did string) string {
 		return h
 	}
 
-	c := client.NewClientWithOptions(client.ClientOptions{
+	c := frodo.NewClientWithOptions(frodo.ClientOptions{
 		Host: "https://public.api.bsky.app",
 	})
 
@@ -63,7 +63,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	var dn string
 	if did != "" {
 		dn = did
-		c := client.NewClientWithOptions(client.ClientOptions{
+		c := frodo.NewClientWithOptions(frodo.ClientOptions{
 			Host: sessionproxy(),
 		})
 		c.SetSessionHeaders(r)
