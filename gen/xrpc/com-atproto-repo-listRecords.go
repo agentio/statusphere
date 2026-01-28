@@ -1,6 +1,7 @@
 // Code generated ... DO NOT EDIT.
 
 // Package xrpc is generated from Lexicon source files by slink.
+// Code produced by slink and slink itself are released under the AGPL.
 // Get slink at https://github.com/agentio/slink.
 package xrpc // com.atproto.repo.listRecords
 
@@ -21,11 +22,11 @@ type ComATProtoRepoListRecords_Output struct {
 func ComATProtoRepoListRecords(ctx context.Context, c slink.Client, collection string, cursor string, limit int64, repo string, reverse bool) (*ComATProtoRepoListRecords_Output, error) {
 	var output ComATProtoRepoListRecords_Output
 	params := map[string]any{
-		"reverse":    reverse,
-		"repo":       repo,
 		"collection": collection,
-		"limit":      limit,
 		"cursor":     cursor,
+		"limit":      limit,
+		"repo":       repo,
+		"reverse":    reverse,
 	}
 	if err := c.Do(ctx, slink.Query, "", "com.atproto.repo.listRecords", params, nil, &output); err != nil {
 		return nil, err
