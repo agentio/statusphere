@@ -1,6 +1,7 @@
-all:
+all:	xrpc statusphere
+
+statusphere:
 	go install ./...
 
-
 xrpc:
-	slink generate xrpc -m xrpc.json
+	slink generate xrpc -i lexicons -i xyz -m xrpc.json
