@@ -1,12 +1,11 @@
-FROM golang:1.25.1 AS builder
+FROM golang:1.26.4 AS builder
 WORKDIR /app
 COPY . ./
+RUN make xrpc
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o statusphere .
 
-FROM alpine:3
-RUN apk add --no-cache ca-certificates
+FROM gcr.io/distroless/static-debian13
 COPY --from=builder /app/statusphere /usr/local/bin/statusphere
-RUN mkdir /data
 WORKDIR /data
 ENTRYPOINT ["/usr/local/bin/statusphere"]
 CMD ["statusphere"]
